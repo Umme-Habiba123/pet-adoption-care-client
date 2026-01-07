@@ -4,7 +4,8 @@ import Hero from './HeroSection/Hero';
 import Services from './Services/Services';
 import About from './about/About';
 import AdoptionInfo from './AdoptionInfo/AdoptionInfo';
-import FAQSection from './FAQSection/FaqSection';
+import FAQSection from '../FAQ/FAQSection/FaqSection';
+
 
 const Home = () => {
     return (

@@ -201,7 +201,7 @@ const Hero = () => {
                 >
                   <div className="flex items-center gap-1.5 mb-1">
                     <motion.div
-                      whileHover={{ rotate: 360 }}
+                      whileHover={{ rotate: 360 }} 
                       transition={{ duration: 0.6 }}
                     >
                       {stat.icon}

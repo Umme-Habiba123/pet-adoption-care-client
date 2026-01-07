@@ -1,5 +1,9 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { FaHome } from "react-icons/fa";
+import { GiSelfLove } from "react-icons/gi";
+import { MdOutlineMiscellaneousServices } from "react-icons/md";
+import { TbVaccine } from "react-icons/tb";
 
 const FAQSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -30,9 +34,9 @@ const FAQSection = () => {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
       {/* TOP - TITLE & DESCRIPTION */}
-      <div className="text-center mb-10 sm:mb-16">
-        <p className="text-red-600 font-semibold mb-2 text-sm sm:text-base uppercase tracking-wider">
-          ❤️‍🩹 Frequently Asked Questions
+      <div className="text-center mb-5 sm:mb-10">
+        <p className="text-red-600 font-semibold mb-1 text-xs sm:text-base uppercase tracking-wider">
+           Frequently Asked Questions
         </p>
         
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4 sm:mb-6">
@@ -104,8 +108,8 @@ const FAQSection = () => {
             </div>
             
             {/* Bottom Tag */}
-            <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-white rounded-full px-6 py-2 shadow-lg border">
-              <span className="font-bold text-red-600 text-sm">❤️ Forever Home Promise</span>
+            <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex bg-white rounded-full px-6 py-2 shadow-lg border border-red-200">
+              <span className="font-bold text-red-600 text-sm"> <GiSelfLove />Forever Home Promise</span>
             </div>
           </div>
         </div>
@@ -121,7 +125,7 @@ const FAQSection = () => {
             </p>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {faqs.map((faq, index) => (
               <div 
                 key={index}
@@ -134,10 +138,11 @@ const FAQSection = () => {
                   <div className="flex items-start gap-3">
                     <div className={`rounded-lg p-2 ${index % 2 === 0 ? 'bg-red-100' : 'bg-gray-100'}`}>
                       <span className={`text-sm ${index % 2 === 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                        {index === 0 && "🏠"}
+                        {index === 0 && <FaHome sixe={20}/>}
                         {index === 1 && "🔄"}
-                        {index === 2 && "💉"}
-                        {index === 3 && "🛠️"}
+                        {index === 2 && <TbVaccine size={20} />}
+                        {index === 3 && <MdOutlineMiscellaneousServices size={20} />
+}
                       </span>
                     </div>
                     <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">

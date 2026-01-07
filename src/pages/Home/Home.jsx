@@ -5,6 +5,8 @@ import Services from './Services/Services';
 import About from './about/About';
 import AdoptionInfo from './AdoptionInfo/AdoptionInfo';
 import FAQSection from '../FAQ/FAQSection/FaqSection';
+import Footer from './Footer/Footer';
+import RescueFamily from './RescueFamily/RescueFamily';
 
 
 const Home = () => {
@@ -16,6 +18,8 @@ const Home = () => {
             <About></About>
             <AdoptionInfo></AdoptionInfo>
             <FAQSection></FAQSection>
+            <RescueFamily></RescueFamily>
+            <Footer></Footer>
         </div>
     );
 };

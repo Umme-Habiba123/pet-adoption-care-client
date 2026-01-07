@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Heart, User, Menu, X, PawPrint, Home, Dog, Cat, Bird, Phone, Mail, ChevronDown } from 'lucide-react';
+import { Search, Heart, User, Menu, X, PawPrint, Home, Dog, Cat, Bird, Phone, Mail, ChevronDown, LogOut, LogIn, UserPlus } from 'lucide-react';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -7,8 +7,11 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState(null); // null মানে লগআউট, object মানে লগিন
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const mobileMenuRef = useRef(null);
   const searchRef = useRef(null);
+  const userMenuRef = useRef(null);
 
   // Navigation items
   const navItems = [
@@ -26,6 +29,14 @@ const Navbar = () => {
     { id: 'birds', label: 'Birds', icon: <Bird size={16} />, count: 18 },
   ];
 
+  // User menu items
+  const userMenuItems = [
+    { id: 'profile', label: 'My Profile', icon: <User size={16} /> },
+    { id: 'applications', label: 'Applications', icon: <PawPrint size={16} />, count: 3 },
+    { id: 'favorites', label: 'Favorites', icon: <Heart size={16} />, count: 5 },
+    { id: 'messages', label: 'Messages', icon: <Mail size={16} />, count: 2 },
+  ];
+
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -35,7 +46,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu when clicking outside
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
@@ -48,10 +59,33 @@ const Navbar = () => {
           setIsSearchOpen(false);
         }
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        if (!event.target.closest('#userMenuBtn')) {
+          setShowUserMenu(false);
+        }
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // User এর নাম থেকে ইনিশিয়াল বের করার ফাংশন
+  const getUserInitials = (name) => {
+    if (!name) return 'U';
+    
+    const words = name.trim().split(' ');
+    if (words.length === 1) {
+      // এক শব্দের নাম হলে প্রথম ২ অক্ষর
+      return words[0].substring(0, 2).toUpperCase();
+    } else {
+      // একাধিক শব্দ হলে প্রতিটির প্রথম অক্ষর
+      return words
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+    }
+  };
 
   // Handle search
   const handleSearch = (e) => {
@@ -69,6 +103,39 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  // Handle login with user name
+  const handleLogin = (userName, userEmail) => {
+    const userData = {
+      name: userName,
+      email: userEmail
+    };
+    setUser(userData);
+    setShowUserMenu(false);
+    setIsMobileMenuOpen(false);
+    alert(`Welcome back, ${userName}!`);
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    setUser(null);
+    setShowUserMenu(false);
+    alert('Logged out successfully!');
+  };
+
+  // Handle signup
+  const handleSignup = () => {
+    setIsMobileMenuOpen(false);
+    alert('Redirecting to signup page...');
+  };
+
+  // Demo users for testing - আপনি পরে API থেকে নিবেন
+  const demoUsers = [
+    { name: 'Ayan Jowarder', email: 'ayan@example.com' },
+    { name: 'John Doe', email: 'john@example.com' },
+    { name: 'Jane Smith', email: 'jane@example.com' },
+    { name: 'David Miller', email: 'david@example.com' },
+  ];
+
   return (
     <>
       {/* Top Announcement Bar */}
@@ -82,8 +149,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Main Navbar - Gray border and moved down */}
-      <div className="mt-2"> {/* Added margin-top to push navbar down */}
+      {/* Main Navbar */}
+      <div className="mt-2">
         <nav className={`sticky top-0 z-50 transition-all duration-300 ${
           scrolled ? 'bg-white shadow-md border-b border-gray-200 ' : 'bg-white border-b border-gray-200'
         }`}>
@@ -179,15 +246,99 @@ const Navbar = () => {
                   </span>
                 </button>
 
+                {/* User Menu */}
+                <div className="relative" ref={userMenuRef}>
+                  {user ? (
+                    <>
+                      <button
+                        id="userMenuBtn"
+                        onClick={() => setShowUserMenu(!showUserMenu)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold flex items-center justify-center">
+                          {getUserInitials(user.name)}
+                        </div>
+                        <ChevronDown size={14} className={`transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {/* User Dropdown Menu */}
+                      {showUserMenu && (
+                        <div className="absolute top-full right-0 mt-2 w-64 bg-white shadow-lg rounded-lg border border-gray-200 py-2 z-50">
+                          <div className="px-4 py-3 border-b border-gray-100">
+                            <p className="font-semibold text-gray-900">{user.name}</p>
+                            <p className="text-sm text-gray-500">{user.email}</p>
+                          </div>
+                          
+                          <div className="py-2">
+                            {userMenuItems.map((item) => (
+                              <button
+                                key={item.id}
+                                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 text-left"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <span className="text-gray-600">{item.icon}</span>
+                                  <span>{item.label}</span>
+                                </div>
+                                {item.count && (
+                                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                                    {item.count}
+                                  </span>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                          
+                          <div className="border-t border-gray-100 pt-2">
+                            <button
+                              onClick={handleLogout}
+                              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 text-red-600 font-medium"
+                            >
+                              <LogOut size={16} />
+                              Logout
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      {/* Quick Login Demo (চাইলে সরিয়ে ফেলতে পারেন) */}
+                      <div className="relative group">
+                        <button
+                          onClick={() => handleLogin('John Doe', 'john@example.com')}
+                          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-red-600 text-red-600 hover:bg-red-50 font-medium"
+                        >
+                          <LogIn size={16} />
+                          Login Demo
+                        </button>
+                        <div className="absolute top-full right-0 mt-1 w-48 bg-white shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 p-2 z-50">
+                          <p className="text-xs text-gray-500 mb-2">Demo Users:</p>
+                          {demoUsers.map((demoUser, index) => (
+                            <button
+                              key={index}
+                              onClick={() => handleLogin(demoUser.name, demoUser.email)}
+                              className="w-full text-left px-3 py-2 hover:bg-gray-50 rounded text-sm"
+                            >
+                              {demoUser.name}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <button
+                        onClick={handleSignup}
+                        className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-medium"
+                      >
+                        Sign Up
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Adopt Button */}
-                <button className="px-5 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors flex items-center space-x-2">
+                <button className="px-5 py-2 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors flex items-center space-x-2">
                   <PawPrint size={16} />
                   <span>Adopt Now</span>
-                </button>
-
-                {/* User Profile */}
-                <button className="w-9 h-9 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors">
-                  AJ
                 </button>
               </div>
 
@@ -259,6 +410,67 @@ const Navbar = () => {
           className="fixed inset-0 top-16 z-40 bg-white lg:hidden"
         >
           <div className="container mx-auto px-4 py-4">
+            {/* Login/Signup Section for Mobile */}
+            <div className="mb-6 p-4 bg-gray-50 rounded-xl">
+              {user ? (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-600 to-red-700 text-white font-bold flex items-center justify-center">
+                      {getUserInitials(user.name)}
+                    </div>
+                    <div>
+                      <p className="font-semibold">{user.name}</p>
+                      <p className="text-sm text-gray-600">{user.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                  >
+                    <LogOut size={20} />
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Demo Login:</p>
+                  <div className="space-y-2">
+                    {demoUsers.map((demoUser, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleLogin(demoUser.name, demoUser.email)}
+                        className="w-full flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+                      >
+                        <div>
+                          <p className="font-medium">{demoUser.name}</p>
+                          <p className="text-xs text-gray-500">{demoUser.email}</p>
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-sm font-bold">
+                          {getUserInitials(demoUser.name)}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <div className="flex gap-2 pt-4 border-t border-gray-200">
+                    <button
+                      onClick={() => handleLogin('New User', 'new@example.com')}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-red-600 text-red-600 font-medium"
+                    >
+                      <LogIn size={18} />
+                      Custom Login
+                    </button>
+                    <button
+                      onClick={handleSignup}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-red-600 text-white font-medium"
+                    >
+                      <UserPlus size={18} />
+                      Sign Up
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="space-y-1">
               {navItems.map((item) => (
                 <button
@@ -283,6 +495,29 @@ const Navbar = () => {
                   )}
                 </button>
               ))}
+
+              {/* User Menu Items for Mobile (if logged in) */}
+              {user && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 px-4 mb-3">My Account</p>
+                  {userMenuItems.map((item) => (
+                    <button
+                      key={item.id}
+                      className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-gray-600">{item.icon}</span>
+                        <span>{item.label}</span>
+                      </div>
+                      {item.count && (
+                        <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                          {item.count}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Pet Categories Section */}
               <div className="mt-4 p-4 border-t border-gray-200">

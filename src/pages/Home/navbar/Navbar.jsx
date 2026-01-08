@@ -1,40 +1,48 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Heart, User, Menu, X, PawPrint, Home, Dog, Cat, Bird, Phone, Mail, ChevronDown, LogOut, LogIn, UserPlus } from 'lucide-react';
+import { 
+  Search, Heart, User, Menu, X, PawPrint, Home, 
+  Dog, Cat, Bird, Phone, Mail, ChevronDown, 
+  LogOut, LogIn, UserPlus 
+} from 'lucide-react';
+import { NavLink, useNavigate, useLocation } from 'react-router';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState('home');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState(null); // null মানে লগআউট, object মানে লগিন
+  const [user, setUser] = useState(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   const mobileMenuRef = useRef(null);
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
 
-  // Navigation items
+  // Navigation items with paths
   const navItems = [
-    { id: 'home', label: 'Home', icon: <Home size={18} /> },
-    { id: 'adopt', label: 'Adopt', icon: <PawPrint size={18} />, count: 12 },
-    { id: 'foster', label: 'Foster', icon: <Heart size={18} /> },
-    { id: 'about', label: 'About', icon: <User size={18} /> },
-    { id: 'contact', label: 'Contact', icon: <Phone size={18} /> },
+    { id: 'home', label: 'Home', icon: <Home size={18} />, path: '/' },
+    { id: 'adopt', label: 'Adopt', icon: <PawPrint size={18} />, count: 12, path: '/adoption' },
+    { id: 'foster', label: 'Foster', icon: <Heart size={18} />, path: '/foster' },
+    { id: 'about', label: 'About', icon: <User size={18} />, path: '/about' },
+    { id: 'contact', label: 'Contact', icon: <Phone size={18} />, path: '/contact' },
   ];
 
-  // Pet categories for dropdown
+  // Pet categories for dropdown with paths
   const petCategories = [
-    { id: 'dogs', label: 'Dogs', icon: <Dog size={16} />, count: 45 },
-    { id: 'cats', label: 'Cats', icon: <Cat size={16} />, count: 32 },
-    { id: 'birds', label: 'Birds', icon: <Bird size={16} />, count: 18 },
+    { id: 'dogs', label: 'Dogs', icon: <Dog size={16} />, count: 45, path: '/adopt?type=dog' },
+    { id: 'cats', label: 'Cats', icon: <Cat size={16} />, count: 32, path: '/adopt?type=cat' },
+    { id: 'birds', label: 'Birds', icon: <Bird size={16} />, count: 18, path: '/adopt?type=bird' },
   ];
 
-  // User menu items
+  // User menu items with paths
   const userMenuItems = [
-    { id: 'profile', label: 'My Profile', icon: <User size={16} /> },
-    { id: 'applications', label: 'Applications', icon: <PawPrint size={16} />, count: 3 },
-    { id: 'favorites', label: 'Favorites', icon: <Heart size={16} />, count: 5 },
-    { id: 'messages', label: 'Messages', icon: <Mail size={16} />, count: 2 },
+    { id: 'profile', label: 'My Profile', icon: <User size={16} />, path: '/profile' },
+    { id: 'applications', label: 'Applications', icon: <PawPrint size={16} />, count: 3, path: '/my-applications' },
+    { id: 'favorites', label: 'Favorites', icon: <Heart size={16} />, count: 5, path: '/favorites' },
+    { id: 'messages', label: 'Messages', icon: <Mail size={16} />, count: 2, path: '/messages' },
   ];
 
   // Handle scroll effect
@@ -75,10 +83,8 @@ const Navbar = () => {
     
     const words = name.trim().split(' ');
     if (words.length === 1) {
-      // এক শব্দের নাম হলে প্রথম ২ অক্ষর
       return words[0].substring(0, 2).toUpperCase();
     } else {
-      // একাধিক শব্দ হলে প্রতিটির প্রথম অক্ষর
       return words
         .map(word => word[0])
         .join('')
@@ -91,16 +97,10 @@ const Navbar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      alert(`Searching for: ${searchQuery}`);
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
       setIsSearchOpen(false);
     }
-  };
-
-  // Handle navigation click
-  const handleNavClick = (id) => {
-    setActiveNav(id);
-    setIsMobileMenuOpen(false);
   };
 
   // Handle login with user name
@@ -120,21 +120,27 @@ const Navbar = () => {
     setUser(null);
     setShowUserMenu(false);
     alert('Logged out successfully!');
+    navigate('/');
   };
 
-  // Handle signup
-  const handleSignup = () => {
-    setIsMobileMenuOpen(false);
-    alert('Redirecting to signup page...');
-  };
+  // Handle signup----
+  // const handleSignup = () => {
+  //   setIsMobileMenuOpen(false);
+  //   navigate('/signup');
+  // };
 
-  // Demo users for testing - আপনি পরে API থেকে নিবেন
+  // Demo users for testing
   const demoUsers = [
     { name: 'Ayan Jowarder', email: 'ayan@example.com' },
     { name: 'John Doe', email: 'john@example.com' },
     { name: 'Jane Smith', email: 'jane@example.com' },
     { name: 'David Miller', email: 'david@example.com' },
   ];
+
+  // Check if nav item is active
+  const isNavActive = (path) => {
+    return location.pathname === path;
+  };
 
   return (
     <>
@@ -152,13 +158,13 @@ const Navbar = () => {
       {/* Main Navbar */}
       <div className="mt-2">
         <nav className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white shadow-md border-b border-gray-200 ' : 'bg-white border-b border-gray-200'
+          scrolled ? 'bg-white shadow-md border-b border-gray-200' : 'bg-white border-b border-gray-200'
         }`}>
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               
-              {/* Logo */}
-              <div className="flex items-center space-x-3">
+              {/* Logo with Link */}
+              <NavLink to="/" className="flex items-center space-x-3 no-underline">
                 <div className="relative">
                   <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
                     <PawPrint className="text-white" size={20} />
@@ -174,21 +180,23 @@ const Navbar = () => {
                   </h1>
                   <p className="text-xs text-gray-500 hidden md:block">Find your forever friend</p>
                 </div>
-              </div>
+              </NavLink>
 
               {/* Desktop Navigation */}
               <div className="hidden lg:flex items-center space-x-0">
                 {navItems.map((item) => (
-                  <button
+                  <NavLink
                     key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={`relative flex items-center space-x-2 px-4 py-2 transition-all duration-200 ${
-                      activeNav === item.id
-                        ? 'text-red-600 font-semibold'
-                        : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'
-                    }`}
+                    to={item.path}
+                    className={({ isActive }) => 
+                      `relative flex items-center space-x-2 px-4 py-2 transition-all duration-200 no-underline ${
+                        isActive
+                          ? 'text-red-600 font-semibold'
+                          : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'
+                      }`
+                    }
                   >
-                    <span className={activeNav === item.id ? 'text-red-600' : 'text-gray-500'}>
+                    <span className={isNavActive(item.path) ? 'text-red-600' : 'text-gray-500'}>
                       {item.icon}
                     </span>
                     <span>{item.label}</span>
@@ -197,7 +205,7 @@ const Navbar = () => {
                         {item.count}
                       </span>
                     )}
-                  </button>
+                  </NavLink>
                 ))}
                 
                 {/* Pet Categories Dropdown */}
@@ -206,12 +214,12 @@ const Navbar = () => {
                     <span>Categories</span>
                     <ChevronDown size={14} />
                   </button>
-                  <div className="absolute top-full left-0 mt-1 w-48 bg-white shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200">
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 z-50">
                     {petCategories.map((category) => (
-                      <a
+                      <NavLink
                         key={category.id}
-                        href="#"
-                        className="flex items-center justify-between px-4 py-3 hover:bg-gray-50"
+                        to={category.path}
+                        className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 no-underline text-gray-700"
                       >
                         <div className="flex items-center space-x-3">
                           <span className="text-gray-600">{category.icon}</span>
@@ -220,7 +228,7 @@ const Navbar = () => {
                         <span className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
                           {category.count}
                         </span>
-                      </a>
+                      </NavLink>
                     ))}
                   </div>
                 </div>
@@ -239,12 +247,15 @@ const Navbar = () => {
                 </button>
 
                 {/* Favorites */}
-                <button className="relative p-2 rounded-lg hover:bg-gray-100">
+                <NavLink
+                  to="/favorites"
+                  className="relative p-2 rounded-lg hover:bg-gray-100 no-underline"
+                >
                   <Heart className="text-red-500" size={20} />
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                     3
                   </span>
-                </button>
+                </NavLink>
 
                 {/* User Menu */}
                 <div className="relative" ref={userMenuRef}>
@@ -271,9 +282,11 @@ const Navbar = () => {
                           
                           <div className="py-2">
                             {userMenuItems.map((item) => (
-                              <button
+                              <NavLink
                                 key={item.id}
-                                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 text-left"
+                                to={item.path}
+                                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 text-left no-underline text-gray-700"
+                                onClick={() => setShowUserMenu(false)}
                               >
                                 <div className="flex items-center gap-3">
                                   <span className="text-gray-600">{item.icon}</span>
@@ -284,7 +297,7 @@ const Navbar = () => {
                                     {item.count}
                                   </span>
                                 )}
-                              </button>
+                              </NavLink>
                             ))}
                           </div>
                           
@@ -302,14 +315,14 @@ const Navbar = () => {
                     </>
                   ) : (
                     <div className="flex items-center gap-2">
-                      {/* Quick Login Demo (চাইলে সরিয়ে ফেলতে পারেন) */}
+                      {/* Quick Login Demo */}
                       <div className="relative group">
                         <button
-                          onClick={() => handleLogin('John Doe', 'john@example.com')}
+                          onClick={() => navigate('/login')}
                           className="flex items-center gap-2 px-4 py-2 rounded-lg border border-red-600 text-red-600 hover:bg-red-50 font-medium"
                         >
                           <LogIn size={16} />
-                          Login Demo
+                          Login
                         </button>
                         <div className="absolute top-full right-0 mt-1 w-48 bg-white shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 p-2 z-50">
                           <p className="text-xs text-gray-500 mb-2">Demo Users:</p>
@@ -326,7 +339,7 @@ const Navbar = () => {
                       </div>
                       
                       <button
-                        onClick={handleSignup}
+                        onClick={() => navigate('/signup')}
                         className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-medium"
                       >
                         Sign Up
@@ -335,8 +348,11 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {/* Adopt Button */}
-                <button className="px-5 py-2 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors flex items-center space-x-2">
+                {/* Adopt Now Button */}
+                <button 
+                  onClick={() => navigate('/adopt')}
+                  className="px-5 py-2 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors flex items-center space-x-2"
+                >
                   <PawPrint size={16} />
                   <span>Adopt Now</span>
                 </button>
@@ -352,12 +368,15 @@ const Navbar = () => {
                   <Search className="text-gray-600" size={22} />
                 </button>
                 
-                <button className="relative p-2">
+                <NavLink
+                  to="/favorites"
+                  className="relative p-2 no-underline"
+                >
                   <Heart className="text-red-500" size={22} />
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
                     3
                   </span>
-                </button>
+                </NavLink>
                 
                 <button
                   id="mobileMenuBtn"
@@ -409,7 +428,7 @@ const Navbar = () => {
           ref={mobileMenuRef}
           className="fixed inset-0 top-16 z-40 bg-white lg:hidden"
         >
-          <div className="container mx-auto px-4 py-4">
+          <div className="container mx-auto px-4 py-4 h-full overflow-y-auto">
             {/* Login/Signup Section for Mobile */}
             <div className="mb-6 p-4 bg-gray-50 rounded-xl">
               {user ? (
@@ -453,14 +472,14 @@ const Navbar = () => {
                   
                   <div className="flex gap-2 pt-4 border-t border-gray-200">
                     <button
-                      onClick={() => handleLogin('New User', 'new@example.com')}
+                      onClick={() => navigate('/login')}
                       className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-red-600 text-red-600 font-medium"
                     >
                       <LogIn size={18} />
-                      Custom Login
+                      Login
                     </button>
                     <button
-                      onClick={handleSignup}
+                      onClick={() => navigate('/signup')}
                       className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-red-600 text-white font-medium"
                     >
                       <UserPlus size={18} />
@@ -473,17 +492,20 @@ const Navbar = () => {
 
             <div className="space-y-1">
               {navItems.map((item) => (
-                <button
+                <NavLink
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between p-4 rounded-lg transition-colors ${
-                    activeNav === item.id
-                      ? 'bg-red-50 text-red-600 border border-red-100'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  }`}
+                  to={item.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={({ isActive }) => 
+                    `w-full flex items-center justify-between p-4 rounded-lg transition-colors no-underline ${
+                      isActive
+                        ? 'bg-red-50 text-red-600 border border-red-100'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`
+                  }
                 >
                   <div className="flex items-center space-x-3">
-                    <span className={activeNav === item.id ? 'text-red-600' : 'text-gray-500'}>
+                    <span className={isNavActive(item.path) ? 'text-red-600' : 'text-gray-500'}>
                       {item.icon}
                     </span>
                     <span className="font-medium">{item.label}</span>
@@ -493,7 +515,7 @@ const Navbar = () => {
                       {item.count}
                     </span>
                   )}
-                </button>
+                </NavLink>
               ))}
 
               {/* User Menu Items for Mobile (if logged in) */}
@@ -501,9 +523,11 @@ const Navbar = () => {
                 <div className="mt-4">
                   <p className="text-sm font-medium text-gray-700 px-4 mb-3">My Account</p>
                   {userMenuItems.map((item) => (
-                    <button
+                    <NavLink
                       key={item.id}
-                      className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                      to={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg no-underline text-gray-700"
                     >
                       <div className="flex items-center gap-3">
                         <span className="text-gray-600">{item.icon}</span>
@@ -514,7 +538,7 @@ const Navbar = () => {
                           {item.count}
                         </span>
                       )}
-                    </button>
+                    </NavLink>
                   ))}
                 </div>
               )}
@@ -524,9 +548,11 @@ const Navbar = () => {
                 <p className="text-sm font-medium text-gray-700 mb-3">Pet Categories</p>
                 <div className="space-y-2">
                   {petCategories.map((category) => (
-                    <button
+                    <NavLink
                       key={category.id}
-                      className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                      to={category.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors no-underline text-gray-700"
                     >
                       <div className="flex items-center space-x-3">
                         <span className="text-gray-600">{category.icon}</span>
@@ -535,17 +561,29 @@ const Navbar = () => {
                       <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">
                         {category.count}
                       </span>
-                    </button>
+                    </NavLink>
                   ))}
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="mt-6 space-y-3">
-                <button className="w-full py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors">
+                <button 
+                  onClick={() => {
+                    navigate('/adopt');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors"
+                >
                   Start Adoption
                 </button>
-                <button className="w-full py-3 rounded-lg border border-red-600 text-red-600 font-semibold hover:bg-red-50 transition-colors">
+                <button 
+                  onClick={() => {
+                    navigate('/foster');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full py-3 rounded-lg border border-red-600 text-red-600 font-semibold hover:bg-red-50 transition-colors"
+                >
                   Become a Foster
                 </button>
               </div>

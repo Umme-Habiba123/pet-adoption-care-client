@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router";
 import RootLayout from "../layouts/RootLayout";
 import Home from "../pages/Home/Home";
-import AllFAQs from "../pages/FAQ/allFAQs/AllFAQs";
 import ContactInfo from "../pages/ContactInfo/ContactInfo";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Authentication/Login/Login";
 import FAQSection from "../pages/FAQ/FAQSection/FaqSection";
+import Adoption from "../pages/Adoption/Adoption";
 
 export const router = createBrowserRouter([
   {
@@ -17,16 +17,16 @@ export const router = createBrowserRouter([
         Component:Home
       },
       {
-        path:'/faqs',
-        element:<AllFAQs></AllFAQs>
-      },
-      {
         path:'/contact',
         element:<ContactInfo></ContactInfo>
       },
       {
         path:'/FAQ',
         element:<FAQSection></FAQSection>
+      },
+      {
+        path:'adoption',
+        element:<Adoption></Adoption>
       },
     ]
   },

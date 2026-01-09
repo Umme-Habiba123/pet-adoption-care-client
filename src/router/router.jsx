@@ -6,6 +6,8 @@ import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Authentication/Login/Login";
 import FAQSection from "../pages/FAQ/FAQSection/FaqSection";
 import ForAdoptionForm from "../pages/AdoptionDropdown/ForAdoption/ForAdoptionForm";
+import Dashboard from "../pages/dashboard/Dashboard";
+import AdminDashboard from "../pages/dashboard/AdminDashboard";
 // import Adoption from "../pages/Adoption/Adoption";
 
 export const router = createBrowserRouter([
@@ -44,5 +46,13 @@ export const router = createBrowserRouter([
       //   Component:Login
       // },
     ]
-  }
+  },
+  {
+     path:'/dashboard',
+     Component:Dashboard
+  },
+  {
+     path:'/adminDashboard',
+     Component:AdminDashboard
+  },
 ]);

@@ -6,6 +6,7 @@ import {
   Settings, Bell, HelpCircle, Globe
 } from 'lucide-react';
 import { NavLink, useNavigate, useLocation } from 'react-router';
+import { MdDashboard } from 'react-icons/md';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -117,6 +118,7 @@ const Navbar = () => {
     { id: 'foster', label: 'Foster', icon: <Heart size={18} />, path: '/foster' },
     { id: 'about', label: 'About', icon: <User size={18} />, path: '/about' },
     { id: 'contact', label: 'Contact', icon: <Phone size={18} />, path: '/contact' },
+    { id: 'dashboard', label: 'dashboard', icon: <MdDashboard size={18} />, path: '/dashboard' },
   ];
 
   // Demo users
@@ -198,7 +200,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top Announcement Bar - RED */}
-      <div className="bg-red-600 text-white text-sm py-2 px-4">
+      <div className="bg-black text-white text-sm py-2 px-4">
         <div className="container mx-auto text-center">
           <span className="flex items-center justify-center gap-2">
             <Heart size={14} className="text-white" />

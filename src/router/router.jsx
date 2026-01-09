@@ -5,7 +5,8 @@ import ContactInfo from "../pages/ContactInfo/ContactInfo";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Authentication/Login/Login";
 import FAQSection from "../pages/FAQ/FAQSection/FaqSection";
-import Adoption from "../pages/Adoption/Adoption";
+import ForAdoptionForm from "../pages/AdoptionDropdown/ForAdoption/ForAdoptionForm";
+// import Adoption from "../pages/Adoption/Adoption";
 
 export const router = createBrowserRouter([
   {
@@ -25,8 +26,8 @@ export const router = createBrowserRouter([
         element:<FAQSection></FAQSection>
       },
       {
-        path:'adoption',
-        element:<Adoption></Adoption>
+        path:'adoptionForm',
+        element:<ForAdoptionForm></ForAdoptionForm>
       },
     ]
   },

@@ -3,10 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import {
   FaHeart,
-  FaHome,
-  FaPaw,
   FaUserFriends,
-  FaCalendarAlt,
   FaClock,
   FaDog,
   FaCat,
@@ -16,9 +13,7 @@ import {
   FaTimesCircle,
   FaPhone,
   FaEnvelope,
-  FaMapMarkerAlt,
   FaArrowRight,
-  FaPlus,
   FaQuestionCircle,
   FaHandHoldingHeart,
   FaShieldAlt,

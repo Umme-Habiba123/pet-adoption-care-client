@@ -6,8 +6,10 @@ import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Authentication/Login/Login";
 import FAQSection from "../pages/FAQ/FAQSection/FaqSection";
 import ForAdoptionForm from "../pages/AdoptionDropdown/ForAdoption/ForAdoptionForm";
-import Dashboard from "../pages/dashboard/Dashboard";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
+import DashboardLayout from "../pages/dashboard/DashboardLayout";
+import BuyerDashboard from "../pages/dashboard/buyerDashboard/BuyerDashboard";
+import BrowseAvailabePets from "../Components/BrowseAvailabePets/BrowseAvailabePets";
 // import Adoption from "../pages/Adoption/Adoption";
 
 export const router = createBrowserRouter([
@@ -31,6 +33,10 @@ export const router = createBrowserRouter([
         path:'adoptionForm',
         element:<ForAdoptionForm></ForAdoptionForm>
       },
+      {
+     path:'/browse-pets',
+     Component:BrowseAvailabePets
+  },
     ]
   },
   {
@@ -48,11 +54,16 @@ export const router = createBrowserRouter([
     ]
   },
   {
-     path:'/dashboard',
-     Component:Dashboard
+     path:'/dashboardLayout',
+     Component:DashboardLayout
   },
   {
      path:'/adminDashboard',
      Component:AdminDashboard
   },
+  {
+     path:'/dashboard/buyer',
+     Component:BuyerDashboard
+  },
+  
 ]);

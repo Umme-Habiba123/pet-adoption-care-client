@@ -79,7 +79,7 @@ const ContactInfo = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-16">
+      <div className=" bg-black text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-3 bg-white/20 p-4 rounded-full mb-6">
             <GiLoveLetter size={32} />

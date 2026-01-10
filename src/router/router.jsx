@@ -13,6 +13,7 @@ import BrowseAvailabePets from "../Components/BrowseAvailabePets/BrowseAvailabeP
 import GetAdoptionForm from "../pages/AdoptionDropdown/getAdoptionForm/GetAdoptionForm";
 import AdoptionSuccess from "../pages/AdoptionDropdown/getAdoptionForm/AdoptionSuccess";
 import Foster from "../pages/Foster/Foster";
+import About from "../pages/Home/about/About";
 // import Adoption from "../pages/Adoption/Adoption";
 
 export const router = createBrowserRouter([
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: "foster",
         Component: Foster
+      },
+      {
+        path: "about",
+        Component: About
       },
     
     ],

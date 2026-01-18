@@ -81,11 +81,11 @@ const DashboardLayout = () => {
 
     if (userRole === 'seller') {
       return [
-        { 
-          title: 'Dashboard', 
-          path: '/dashboard/seller', 
-          icon: <FaTachometerAlt className="text-lg" />,
-        },
+        // { 
+        //   title: 'Dashboard', 
+        //   path: '/dashboard/seller', 
+        //   icon: <FaTachometerAlt className="text-lg" />,
+        // },
         { 
           title: 'My Pets', 
           path: '/dashboard/seller/pets', 
@@ -118,11 +118,11 @@ const DashboardLayout = () => {
 
     if (userRole === 'buyer') {
       return [
-        { 
-          title: 'Dashboard', 
-          path: '/dashboard/buyer', 
-          icon: <FaTachometerAlt className="text-lg" />,
-        },
+        // { 
+        //   title: 'Dashboard', 
+        //   path: '/dashboard/buyer', 
+        //   icon: <FaTachometerAlt className="text-lg" />,
+        // },
         { 
           title: 'Browse Pets', 
           path: '/dashboard/buyer/browse', 

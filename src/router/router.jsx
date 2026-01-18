@@ -86,7 +86,12 @@ export const router = createBrowserRouter([
       // },
     ],
   },
+  
   {
+    path: "/",
+    element: <RootLayout></RootLayout>,
+    children: [
+       {
     path: "/dashboardLayout",
     Component: DashboardLayout,
   },
@@ -98,4 +103,13 @@ export const router = createBrowserRouter([
     path: "/dashboard/buyer",
     Component: BuyerDashboard,
   },
+  {
+    path: "/dashboard/buyer/browse",
+    Component: BuyerDashboard,
+  },
+
+    ]
+  }
+
+ 
 ]);

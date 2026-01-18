@@ -14,6 +14,8 @@ import GetAdoptionForm from "../pages/AdoptionDropdown/getAdoptionForm/GetAdopti
 import AdoptionSuccess from "../pages/AdoptionDropdown/getAdoptionForm/AdoptionSuccess";
 import Foster from "../pages/Foster/Foster";
 import About from "../pages/Home/about/About";
+import ServiceDetails from "../pages/Home/Services/ServiceDetails";
+import Services from "../pages/Home/Services/Services";
 // import Adoption from "../pages/Adoption/Adoption";
 
 export const router = createBrowserRouter([
@@ -53,9 +55,19 @@ export const router = createBrowserRouter([
         path: "foster",
         Component: Foster
       },
+
       {
         path: "about",
         Component: About
+      },
+       {
+        path: "/services", 
+        element: <Services />, 
+      },
+   
+      {
+        path: "services/:serviceId",
+        Component: ServiceDetails
       },
     
     ],

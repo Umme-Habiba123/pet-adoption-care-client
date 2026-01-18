@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { FaPaw, FaShower, FaGraduationCap, FaSyringe, FaHome, FaHeart, FaArrowRight } from 'react-icons/fa';
+import { Link } from 'react-router';
 
 const services = [
   {
@@ -8,12 +9,11 @@ const services = [
     title: "Grooming",
     desc: "Professional grooming with premium products for healthy skin and coat.",
     img: "https://i.ibb.co.com/fVJ3PP9b/3852.webp",
-    icon: <FaShower />,
+    iconType: "shower",
     color: "from-black to-gray-800",
     borderColor: "border-red-500",
     gradient: "from-red-50 to-red-100",
     stats: "98% Satisfaction",
-    pageUrl: "/services/grooming",
     features: [
       "Full-body grooming",
       "Nail trimming",
@@ -26,12 +26,11 @@ const services = [
     title: "Training",
     desc: "Comprehensive behavior training from basic obedience to advanced skills.",
     img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    icon: <FaGraduationCap />,
+    iconType: "graduation",
     color: "from-black to-gray-800",
     borderColor: "border-black",
     gradient: "from-gray-50 to-gray-100",
     stats: "Certified Trainers",
-    pageUrl: "/services/training",
     features: [
       "Basic obedience",
       "Behavior correction",
@@ -44,12 +43,11 @@ const services = [
     title: "Vaccination",
     desc: "Complete vaccination schedule with expert veterinary supervision.",
     img: "https://i.ibb.co.com/93wDSDv3/shutterstock-507811945-1.png",
-    icon: <FaSyringe />,
+    iconType: "syringe",
     color: "from-black to-gray-800",
     borderColor: "border-red-600",
     gradient: "from-red-100 to-red-50",
     stats: "100% Safe",
-    pageUrl: "/services/vaccination",
     features: [
       "Core vaccines",
       "Annual boosters",
@@ -62,12 +60,11 @@ const services = [
     title: "Day Care",
     desc: "Safe and fun environment with constant supervision and playtime.",
     img: "https://i.ibb.co.com/MynmbwPg/1682008182186.png",
-    icon: <FaHome />,
+    iconType: "home",
     color: "from-black to-gray-800",
     borderColor: "border-red-400",
     gradient: "from-amber-50 to-red-50",
     stats: "24/7 Monitoring",
-    pageUrl: "/services/daycare",
     features: [
       "Supervised playtime",
       "Indoor/outdoor areas",
@@ -77,8 +74,19 @@ const services = [
   },
 ];
 
+// Icon mapping function
+const getIcon = (iconType) => {
+  switch(iconType) {
+    case 'shower': return <FaShower />;
+    case 'graduation': return <FaGraduationCap />;
+    case 'syringe': return <FaSyringe />;
+    case 'home': return <FaHome />;
+    default: return <FaPaw />;
+  }
+};
+
 const Services = () => {
-  const [selectedService, setSelectedService] = useState(null);
+  const navigate = useNavigate();
 
   // Animation variants
   const containerVariants = {
@@ -116,70 +124,40 @@ const Services = () => {
     }
   };
 
-  // Handle Learn More Click - System ready
+  // Handle Learn More Click
   const handleLearnMore = (serviceId, e) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // Find the service
-    const service = services.find(s => s.id === serviceId);
-    setSelectedService(service);
+    // Navigate to service details page
+    navigate(`/services/${serviceId}`);
     
-    // Option 1: Navigate to service page (for React Router)
-    // navigate(service.pageUrl);
-    
-    // Option 2: Show service details modal (current implementation)
-    // showServiceModal(service);
-    
-    // Option 3: Scroll to service details section
-    // scrollToServiceDetails(serviceId);
-    
-    // Option 4: Log for now - আপনি পরে implement করবেন
-    console.log(`Navigating to: ${service.pageUrl}`);
-    console.log(`Service: ${service.title}`);
-    
-    // Temporary alert (আপনি পরে remove করবেন)
-    alert(`Learn More clicked for: ${service.title}\n\nThis will navigate to: ${service.pageUrl}\n\nSystem is ready for your implementation.`);
-    
-    // Future implementation:
-    // 1. React Router ব্যবহার করলে:
-    //    import { useNavigate } from 'react-router-dom';
-    //    const navigate = useNavigate();
-    //    navigate(service.pageUrl);
-    
-    // 2. যদি modal দেখাতে চান:
-    //    setShowServiceModal(true);
-    //    setSelectedService(service);
+    // Scroll to top
+    window.scrollTo(0, 0);
   };
 
   // Handle View All Services
   const handleViewAllServices = (e) => {
     e.preventDefault();
-    console.log("Navigating to: /services");
-    alert("View All Services clicked\n\nThis will navigate to: /services\n\nSystem is ready for your implementation.");
+    navigate('/services');
   };
 
   // Handle Book Consultation
   const handleBookConsultation = (e) => {
     e.preventDefault();
-    console.log("Navigating to: /book-consultation");
-    alert("Book Consultation clicked\n\nThis will navigate to: /book-consultation\n\nSystem is ready for your implementation.");
+    navigate('/book-consultation');
   };
 
   // Handle Emergency Call
   const handleEmergencyCall = (e) => {
     e.preventDefault();
-    // Direct phone call (mobile এ কাজ করবে)
     window.location.href = "tel:+8801873333199";
-    
-    // Desktop এর জন্য alternative
-    alert("Emergency Call: +880 1873333 199\n\nPlease call this number for emergency pet care.");
   };
 
   return (
-    <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-red-50/20">
+    <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-red-50/20 relative overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
           className="absolute top-1/4 -left-20 w-64 h-64 bg-gradient-to-br from-red-100/20 to-transparent rounded-full blur-3xl"
           animate={{ 
@@ -285,10 +263,9 @@ const Services = () => {
                     whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 + index * 0.1, type: "spring" }}
                     whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
                   >
                     <div className="text-lg">
-                      {service.icon}
+                      {getIcon(service.iconType)}
                     </div>
                   </motion.div>
                   
@@ -313,7 +290,7 @@ const Services = () => {
                     {service.desc}
                   </p>
                   
-                  {/* Action Button with click handler */}
+                  {/* Action Button - OPTION 1: Button with onClick */}
                   <motion.button
                     onClick={(e) => handleLearnMore(service.id, e)}
                     className="inline-flex items-center gap-2 text-red-600 font-semibold text-sm group/btn cursor-pointer"
@@ -426,28 +403,6 @@ const Services = () => {
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Selected Service Info (Debug/Development) */}
-      {selectedService && (
-        <div className="fixed bottom-4 right-4 bg-white p-4 rounded-xl shadow-xl border border-red-200 max-w-xs z-50">
-          <h4 className="font-bold text-black mb-2">Service Selected:</h4>
-          <p className="text-sm text-gray-700 mb-1">
-            <strong>Name:</strong> {selectedService.title}
-          </p>
-          <p className="text-sm text-gray-700 mb-1">
-            <strong>Page URL:</strong> {selectedService.pageUrl}
-          </p>
-          <p className="text-sm text-gray-700">
-            <strong>Features:</strong> {selectedService.features.join(", ")}
-          </p>
-          <button 
-            onClick={() => setSelectedService(null)}
-            className="mt-2 text-xs text-red-600 hover:text-red-800"
-          >
-            Close
-          </button>
-        </div>
-      )}
     </section>
   );
 };
